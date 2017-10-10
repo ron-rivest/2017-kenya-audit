@@ -61,7 +61,7 @@ counts_audit_s = {}             # audit counts by site
 ##############################################################################
 ## random integers
 
-audit_seed = 1                  # initial value should be set from 24 decimal dice
+audit_seed = 0                  # initial value should be set from 24 decimal dice
                                 # rolled at public ceremony AFTER sites.csv
                                 # is created and published.
 np.random.seed(audit_seed)
