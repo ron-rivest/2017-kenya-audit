@@ -1,0 +1,30 @@
+Form 34A data:
+    Candidates (34A):
+        ['Zebra', 'Gnu']
+    Site ids:
+        ['site001', 'site002', 'site003', 'site004', 'site005', 'site006']
+    County ids by site:
+        ['county001', 'county001', 'county001', 'county002', 'county002', 'county002']
+    Number voters per site:
+        [600, 500, 700, 400, 500, 600]
+    Votes per candidate by site:
+        site001 [300, 200]
+        site002 [250, 200]
+        site003 [400, 300]
+        site004 [100, 100]
+        site005 [150, 200]
+        site006 [200, 350]
+Audit (video) data:
+    Candidates (audit):
+        ['Zebra', 'Gnu']
+    Votes per candidate by audited site:
+        site002 [250, 200]
+        site006 [100, 300]
+        site003 [400, 300]
+Sites in sample order:
+['site003', 'site006', 'site002', 'site004', 'site001', 'site005']
+Audit results:
+    For 1000 trials:
+        Gnu won 613 times (61.3%)
+        None won 387 times (38.7%)
+    Residual risk: 38.7%

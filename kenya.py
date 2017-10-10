@@ -61,7 +61,7 @@ counts_audit_s = {}             # audit counts by site
 ##############################################################################
 ## random integers
 
-audit_seed = 0                  # initial value should be set from 24 decimal dice
+audit_seed = 1                  # initial value should be set from 24 decimal dice
                                 # rolled at public ceremony AFTER sites.csv
                                 # is created and published.
 np.random.seed(audit_seed)
@@ -137,7 +137,6 @@ def read_sites_csv(sites_file):
             number_voters_s[rows[i][0]] = number_voters[i]
         for i in range(len(rows)):
             counts_34A_s[rows[i][0]] = counts_34A[i]
-
     return 
 
 
@@ -230,6 +229,8 @@ def audit(trials):
     risk = 100*min(win_count.values())/trials
     print("    Residual risk: {:0.1f}%".format(risk))
     return win_count
+
+
 def compute_sites_in_sample_order():
     """ Based on random number seed.
     """
@@ -238,11 +239,18 @@ def compute_sites_in_sample_order():
     global sites_in_sample_order
 
     sites_in_sample_order = []
-    sites = site_ids.copy()
-    while len(sites)>0:
-        site = random_pick(sites)
+    #Do sites that we have results for first. 
+    audit_sites = site_ids_audit.copy()
+    while len(audit_sites)>0:
+        site = random_pick(audit_sites)
         sites_in_sample_order.append(site)
-        sites.remove(site)
+        audit_sites.remove(site)
+
+    non_audit_sites = set(site_ids.copy()) -set(site_ids_audit)
+    while len(non_audit_sites)>0:
+        site = random_pick(non_audit_sites)
+        sites_in_sample_order.append(site)
+        non_audit_sites.remove(site)
 
 def pick( county,sites ,g=1, t =4,):
     if len(sites) < t:
@@ -277,8 +285,11 @@ def random_pick(sites):
     """
 
     global number_voters_s
-
     total_size = sum([number_voters_s[site] for site in sites])
+    if total_size <= 0:
+        print("Len sites: %d"%len(sites))
+        for site in sites:
+            print("Site : %s numb voters for site : %s" %(site,str(number_voters_s[sites])))
     picked_index = random_int(total_size)
     size_so_far = 0
     for i, site in enumerate(sites):
@@ -348,7 +359,8 @@ def compute_winner(printing_wanted=False):
     global county_id_s
     
     # Computer overall tally and total_votes_cast
-    overall_tally = sum([audit_tallies[site] for site in site_ids])
+    overall_tally = sum([np.array(audit_tallies[site]) for site in site_ids])
+
     total_votes_cast = sum(overall_tally)
     if printing_wanted:
         print("Overall tally:", overall_tally)
